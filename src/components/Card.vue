@@ -1,12 +1,12 @@
 <template>
   <div class="my-card col-2">
-      <ul>
-          <li><strong>Title:</strong> {{sendResult.title}}</li>
-          <li><strong>Original Title:</strong> {{sendResult.original_title}}</li>
-          <li><strong>Language:</strong> {{sendResult.original_language}}</li>
-          <li><strong>Vote:</strong> {{sendResult.vote_average}}</li>
-          
-      </ul>
+    <ul >
+        <li><strong>Title:</strong> {{sendResult.title}}</li>
+        <li><strong>Original Title:</strong> {{sendResult.original_title}}</li>
+        <li><strong>Language:</strong> {{sendResult.original_language}}</li>
+        <li><strong>Vote:</strong> {{sendResult.vote_average}}</li>
+        
+    </ul>
   </div>
 </template>
 

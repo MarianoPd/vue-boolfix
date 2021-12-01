@@ -1,8 +1,9 @@
 <template>
   <main >
     <div class="container">
-      <div class="row flex-wrap">
-        <Card v-for="(result, index) in showResult"
+      <div class="row flex-wrap text-center">
+        <h1 v-if="showResult.length === 0">There are no results</h1>
+        <Card v-else v-for="(result, index) in showResult"
               :key="index"
               :sendResult="result"/>
       </div>
@@ -24,7 +25,6 @@ export default {
     data(){
       return{
         
-        isLoaded: false,
       }
     },
     computed:{
@@ -45,5 +45,9 @@ export default {
 main{
     min-height: calc(100vh - 100px);
     background-color: $primary-color;
+    h1{
+      color: white;
+      padding-top: 100px;
+    }
 }
 </style>

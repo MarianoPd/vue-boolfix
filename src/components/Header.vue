@@ -2,15 +2,15 @@
   <header class="container-fluid d-flex justify-content-between ">
     <img src="../assets/img/images.png" alt="logo">
     <div >
-      <input v-model="movieSearch" type="text"
-              @keyup.enter="getApi()" >
-      <button @click="getApi()" >Search</button>
+      <input v-model="search" type="text"
+              @keyup.enter="sendSearch()" >
+      <button @click="sendSearch()" >Search</button>
     </div>
   </header>
 </template>
 
 <script>
-import axios from 'axios';
+
 export default {
   
   name: 'Header',
@@ -19,35 +19,15 @@ export default {
   },
   data(){
     return{
-      movieSearch: '',
-      movieSearchUrl: 'https://api.themoviedb.org/3/search/movie?api_key=b9d6f32d855fdb9b296cc4a18dc951e7&query=',
-      results: [],
+      search: '',
+      
     }
   },
   methods:{
-    sendResult(){
-      this.getApi();
-      this.$emit('sendResult', this.results);      
-    },
-
-    getApi(){
-        this.isLoaded = false;
-        
-        if(this.movieSearch !== ''){
-          axios.get(this.movieSearchUrl + this.movieSearch)
-            .then(r =>{
-              this.isLoaded = true;
-              this.results = r.data.results;
-              this.movieSearch = '';
-              //soluzione non ideale per rendere sincroni getApi e $emit
-              this.$emit('sendResult', this.results);
-            })
-            .catch( e => {
-              console.log('axios error',e);
-            })
-        }
-        
-      },
+    sendSearch(){
+      this.$emit('sendSearch', this.search);
+      this.search = '';
+    }  
   }
 }
 </script>
