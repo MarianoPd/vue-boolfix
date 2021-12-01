@@ -2,49 +2,36 @@
   <main >
     <div class="container">
       <div class="row flex-wrap">
-        <Card/>
+        <Card v-for="(result, index) in showResult"
+              :key="index"
+              :sendResult="result"/>
       </div>
     </div>
   </main>
 </template>
 
 <script>
-import axios from 'axios';
-import Card from './Card.vue'
+
+import Card from './Card.vue';
 export default {
     name: 'Main',
     components:{
       Card,
     },
     props:{
-      searchCall: String,
+      showResult: Array,
     },
     data(){
       return{
-        apiUrl: 'https://api.themoviedb.org/3/movie/550',
-        result: [],
+        
         isLoaded: false,
       }
     },
     computed:{
-      searchMovie(){
-
-        return 0;
-      }
+      
     },
     methods:{
-      getApi(){
-      this.isLoaded = true;
       
-      axios.get(this.apiUrl )
-      .then(r =>{
-        console.log(r.data);
-        
-      })
-      .catch( e => {
-        console.log(e);
-      })
-    },
     }
     
 }
@@ -56,7 +43,7 @@ export default {
 
 
 main{
-    height: calc(100vh - 100px);
+    min-height: calc(100vh - 100px);
     background-color: $primary-color;
 }
 </style>
