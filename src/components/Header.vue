@@ -3,8 +3,8 @@
     <img src="../assets/img/images.png" alt="logo">
     <div >
       <input v-model="movieSearch" type="text"
-              @keyup.enter="sendResult()" >
-      <button @click="sendResult()" >Search</button>
+              @keyup.enter="getApi()" >
+      <button @click="getApi()" >Search</button>
     </div>
   </header>
 </template>
@@ -27,10 +27,9 @@ export default {
   methods:{
     sendResult(){
       this.getApi();
-      this.$emit('sendResult', this.results);
-      
+      this.$emit('sendResult', this.results);      
     },
-    
+
     getApi(){
         this.isLoaded = false;
         
@@ -40,6 +39,8 @@ export default {
               this.isLoaded = true;
               this.results = r.data.results;
               this.movieSearch = '';
+              //soluzione non ideale per rendere sincroni getApi e $emit
+              this.$emit('sendResult', this.results);
             })
             .catch( e => {
               console.log('axios error',e);
