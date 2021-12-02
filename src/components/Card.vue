@@ -1,18 +1,30 @@
 <template>
   <div class="my-card col-2">
-    <ul >
-        
+    <ul >        
         <li><strong>Title:</strong> {{title}}</li>
         <li><strong>Original Title:</strong> {{originalTitle}}</li>
         <li>
-            <img v-if="checkFlagPresence()"  :src="require('../assets/img/'+ sendResult.original_language +'.png')" alt="">
-            <strong v-else>{{sendResult.original_language}}</strong>
+            <img v-if="checkFlagPresence()"  :src="flag" alt="language">
+            <strong v-else>{{language}}</strong>
         </li>
-        <li><strong>Vote:</strong> {{sendResult.vote_average}}</li>
-        <img v-if="sendResult.poster_path !== null" :src="imgBaseUrl + sendResult.poster_path" alt="">
-        
+              
     </ul>
-    
+    <div class="vote">
+            <i v-if="(vote > 0)" class="fas fa-star gold"></i>
+            <i v-else class="fas fa-star gray"></i>
+            <i v-if="(vote > 1)" class="fas fa-star gold"></i>
+            <i v-else class="fas fa-star gray"></i>
+            <i v-if="(vote > 2)" class="fas fa-star gold"></i>
+            <i v-else class="fas fa-star gray"></i>
+            <i v-if="(vote > 3)" class="fas fa-star gold"></i>
+            <i v-else class="fas fa-star gray"></i>
+            <i v-if="(vote > 4)" class="fas fa-star gold"></i>
+            <i v-else class="fas fa-star gray"></i>
+            
+    </div>
+    <h1>{{vote}}</h1>
+    <img v-if="sendResult.poster_path !== null" :src="imgBaseUrl + sendResult.poster_path" alt="">
+
   </div>
 </template>
 
@@ -26,6 +38,8 @@ export default {
             title:'',
             originalTitle: '',
             language: '',
+            flag: '',
+            vote: 0,
         }
     },
     props:{
@@ -40,21 +54,25 @@ export default {
             return false;
         },
         fixProperties(){
-            console.log('watch success');
+            
             if(this.type === 'movie'){
                 this.title = this.sendResult.title;
                 this.originalTitle = this.sendResult.original_title;
-                this.language = this.sendResult.original_language;
             }else if(this.type === 'serie'){
                 this.title = this.sendResult.name;
                 this.originalTitle = this.sendResult.original_name;
-                this.language = this.sendResult.original_language;
             }
-            console.log('watch success');
+            this.language = this.sendResult.original_language;
+            this.vote = Math.ceil(this.sendResult.vote_average /2);
+            if(this.checkFlagPresence()){
+                this.flag = require('../assets/img/'+ this.language +'.png');
+            }            
+                        
         }
     },
     mounted(){
         this.fixProperties();
+        console.log('card mounted');
     },
 }    
 </script>
@@ -75,9 +93,18 @@ export default {
                 img{
                     width: 50px;
                 }
-            }
-            img{
+            }            
+        }
+        img{
                 max-width: 100%;
+        }
+
+        .vote{
+            .gold{
+                color: gold;
+            }
+            .gray{
+                color: gray;
             }
         }
 
