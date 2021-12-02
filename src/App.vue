@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Header @sendSearch="setMovieSearch"/>
-    <Main :showResult="results"/>
+    <Main :showResult="movieResults"/>
   </div>
 </template>
 
@@ -18,26 +18,30 @@ export default {
   },
   data(){
     return{
-      searchMovieString: '',
-      results: [],
-      movieSearchUrl: 'https://api.themoviedb.org/3/search/movie?api_key=b9d6f32d855fdb9b296cc4a18dc951e7&query=',
+      movieResults: [],
+      movieSearchUrl: 'https://api.themoviedb.org/3/search/movie',
+      apiParams:{
+        api_key: 'b9d6f32d855fdb9b296cc4a18dc951e7',
+        language: 'it-IT',
+        query: ''
+      },
       isLoaded: true,
     }
   },
   methods:{
     setMovieSearch(text){
-      this.searchMovieString = text;
+      this.apiParams.query = text;
       this.getApi();
-      console.log('app result',this.searchMovieString);
+      console.log('app result',this.apiParams.query);
     },
      getApi(){
         this.isLoaded = false;
         
         if(this.searchMovieString !== ''){
-          axios.get(this.movieSearchUrl + this.searchMovieString)
+          axios.get(this.movieSearchUrl, {params: this.apiParams})
             .then(r =>{
               this.isLoaded = true;
-              this.results = r.data.results;
+              this.movieResults = r.data.results;
               console.log(r);            
             })
             .catch( e => {

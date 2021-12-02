@@ -3,7 +3,10 @@
     <ul >
         <li><strong>Title:</strong> {{sendResult.title}}</li>
         <li><strong>Original Title:</strong> {{sendResult.original_title}}</li>
-        <li><strong>Language:</strong> {{sendResult.original_language}}</li>
+        <li>
+            <img v-if="checkFlagPresence"  :src="require('../assets/img/'+ sendResult.original_language +'.png')" alt="">
+            <strong v-else>{{sendResult.original_language}}</strong>
+        </li>
         <li><strong>Vote:</strong> {{sendResult.vote_average}}</li>
         
     </ul>
@@ -13,12 +16,24 @@
 <script>
 export default {
     name: 'Card',
+    data(){
+        return{
+
+        }
+    },
     props:{
         sendResult: Object,
     },
     computed:{
         
-    }
+    },
+    methods:{
+        checkFlagPresence(){
+            if(this.sendResult.original_language === 'it') return true;
+            if(this.sendResult.original_language === 'en') return true;
+            return false;
+        }
+    },
 }    
 </script>
 
@@ -33,6 +48,13 @@ export default {
         margin: 10px;
         ul{
             list-style: none;
+            li{
+
+                img{
+                    width: 50px;
+                }
+            }
         }
+
     }
 </style>
