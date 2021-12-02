@@ -1,10 +1,20 @@
 <template>
   <div class="my-card col-2">
-    <ul >
+    <ul v-if="type === 'movie'">
         <li><strong>Title:</strong> {{sendResult.title}}</li>
         <li><strong>Original Title:</strong> {{sendResult.original_title}}</li>
         <li>
-            <img v-if="checkFlagPresence"  :src="require('../assets/img/'+ sendResult.original_language +'.png')" alt="">
+            <img v-if="checkFlagPresence()"  :src="require('../assets/img/'+ sendResult.original_language +'.png')" alt="">
+            <strong v-else>{{sendResult.original_language}}</strong>
+        </li>
+        <li><strong>Vote:</strong> {{sendResult.vote_average}}</li>
+        
+    </ul>
+    <ul v-if="type === 'serie'">
+        <li><strong>Title:</strong> {{sendResult.name}}</li>
+        <li><strong>Original Title:</strong> {{sendResult.original_name}}</li>
+        <li>
+            <img v-if="checkFlagPresence()"  :src="require('../assets/img/'+ sendResult.original_language +'.png')" alt="">
             <strong v-else>{{sendResult.original_language}}</strong>
         </li>
         <li><strong>Vote:</strong> {{sendResult.vote_average}}</li>
@@ -23,6 +33,7 @@ export default {
     },
     props:{
         sendResult: Object,
+        type: String,
     },
     computed:{
         
@@ -44,8 +55,8 @@ export default {
     .my-card{
         background-color: cadetblue;
         color: white;
-        padding: 20px;
-        margin: 10px;
+        border: 5px solid black;
+        
         ul{
             list-style: none;
             li{

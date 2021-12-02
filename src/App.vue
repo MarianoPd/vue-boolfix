@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Header @sendSearch="setMovieSearch"/>
-    <Main :showResult="movieResults"/>
+    <Main :showMovieResult="movieResults" :showSerieResult="serieResults"/>
   </div>
 </template>
 
@@ -19,13 +19,14 @@ export default {
   data(){
     return{
       movieResults: [],
-      movieSearchUrl: 'https://api.themoviedb.org/3/search/movie',
+      serieResults: [],
+      apiUrl: 'https://api.themoviedb.org/3/search',
       apiParams:{
         api_key: 'b9d6f32d855fdb9b296cc4a18dc951e7',
         language: 'it-IT',
         query: ''
       },
-      isLoaded: true,
+      isLoaded: false,
     }
   },
   methods:{
@@ -38,17 +39,26 @@ export default {
         this.isLoaded = false;
         
         if(this.searchMovieString !== ''){
-          axios.get(this.movieSearchUrl, {params: this.apiParams})
-            .then(r =>{
+          axios.all([this.requestMovie(),this.requestSerie()])
+            .then(axios.spread((movies, series) =>{
               this.isLoaded = true;
-              this.movieResults = r.data.results;
-              console.log(r);            
-            })
+              this.movieResults = movies.data.results;
+              this.serieResults = series.data.results;
+              console.log(movies, series);            
+            }))
             .catch( e => {
               console.log('axios error',e);
             })
         }
       },
+
+      requestMovie(){
+        return axios.get(this.apiUrl + '/movie',{params: this.apiParams});
+      },
+      requestSerie(){
+        return axios.get(this.apiUrl + '/tv',{params: this.apiParams});
+      }
+
   },
   computed:{
    

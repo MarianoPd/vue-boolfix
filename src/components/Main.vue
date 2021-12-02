@@ -1,11 +1,23 @@
 <template>
   <main >
     <div class="container">
-      <div class="row flex-wrap text-center">
-        <h1 v-if="showResult.length === 0">There are no results</h1>
-        <Card v-else v-for="(result, index) in showResult"
+      <div class="text-center">
+        <h1 v-if="showMovieResult.length === 0">There are no movies with this name</h1>
+        <div v-else class="row flex-wrap ">
+          <h1>Movies</h1>
+          <Card  v-for="(result, index) in showMovieResult"
               :key="index"
-              :sendResult="result"/>
+              :sendResult="result"
+              :type="'movie'"/>
+        </div>
+        <h1 v-if="showSerieResult.length === 0">There are no series with this name</h1>
+        <div v-else class="row flex-wrap ">
+          <h1>Series</h1>    
+          <Card  v-for="(result, index) in showSerieResult"
+              :key="index"
+              :sendResult="result"
+              :type="'serie'"/>
+        </div>
       </div>
     </div>
   </main>
@@ -20,7 +32,8 @@ export default {
       Card,
     },
     props:{
-      showResult: Array,
+      showMovieResult: Array,
+      showSerieResult: Array,
     },
     data(){
       return{
