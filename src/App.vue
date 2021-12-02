@@ -21,6 +21,7 @@ export default {
       movieResults: [],
       serieResults: [],
       apiUrl: 'https://api.themoviedb.org/3/search',
+      popularApiUrl: 'https://api.themoviedb.org/3/discover',
       apiParams:{
         api_key: 'b9d6f32d855fdb9b296cc4a18dc951e7',
         language: 'it-IT',
@@ -32,14 +33,14 @@ export default {
   methods:{
     setMovieSearch(text){
       this.apiParams.query = text;
-      this.getApi();
+      this.getApi(this.apiUrl);
       console.log('app result',this.apiParams.query);
     },
-     getApi(){
+     getApi(url){
         this.isLoaded = false;
         
         if(this.searchMovieString !== ''){
-          axios.all([this.requestMovie(),this.requestSerie()])
+          axios.all([this.requestMovie(url),this.requestSerie(url)])
             .then(axios.spread((movies, series) =>{
               this.isLoaded = true;
               this.movieResults = movies.data.results;
@@ -52,16 +53,16 @@ export default {
         }
       },
 
-      requestMovie(){
-        return axios.get(this.apiUrl + '/movie',{params: this.apiParams});
+      requestMovie(url){
+        return axios.get(url + '/movie',{params: this.apiParams});
       },
-      requestSerie(){
-        return axios.get(this.apiUrl + '/tv',{params: this.apiParams});
+      requestSerie(url){
+        return axios.get(url + '/tv',{params: this.apiParams});
       }
 
   },
-  computed:{
-   
+  mounted(){
+    this.getApi(this.popularApiUrl);
 
   }
 
