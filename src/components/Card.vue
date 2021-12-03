@@ -19,7 +19,7 @@
                 </p>
                 <p>
                     <strong>Cast</strong>
-                    <span v-for="(member,index) in cast" :key="index">
+                    <span v-for="(member,index) in castArray" :key="index">
                         {{member.name + ', '}}
                     </span>
                 </p>
@@ -60,21 +60,24 @@ export default {
         title: function(){
             if(this.type === 'movie') return this.sendResult.title;
             if(this.type === 'tv') return this.sendResult.name;
+            
             return 0;
+            
         },
         originalTitle: function(){
             if(this.type === 'movie') return this.sendResult.original_title;
             if(this.type === 'tv') return this.sendResult.original_name;
+            
             return 0;
+            
         },
         vote: function(){
             return Math.round(this.sendResult.vote_average /2);
         },
-        cast: function(){
-            this.getCastApi();
-            return this.castArray;
-        }
-        
+                
+    },
+    mounted(){
+        this.getCastApi();
     },
     methods:{
         getCastApi(){

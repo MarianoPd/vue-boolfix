@@ -1,7 +1,9 @@
 <template>
   <div id="app">
-    <Header @sendSearch="setMovieSearch"/>
-    <Main :showMovieResult="movieResults" :showSerieResult="serieResults"/>
+    <Header @sendSearch="setMovieSearch"
+            />
+    <Main :showMovieResult="movieResults" :showSerieResult="serieResults"
+            />
   </div>
 </template>
 
@@ -52,7 +54,6 @@ export default {
           })
       }
     },
-
     requestMovie(url){
       return axios.get(url + '/movie',{params: this.apiParams});
     },
