@@ -8,7 +8,7 @@
             <div class="info ">
                 <p><strong>Titolo: </strong>{{title}}</p>
                 <p v-if="title !== originalTitle"><strong>Titolo originale: </strong>{{originalTitle}}</p>
-                <img v-if="sendResult.original_language" :src="require('../assets/img/'+ sendResult.original_language +'.png')" :alt="sendResult.original_language">
+                <img  :src="getFlag()" :alt="sendResult.original_language">
                 <br>
                 <i v-for="(item, index) in 5" :key="index"  :class="index < vote ? 'fas' : 'far'"  class="fa-star gold"></i>
             </div>
@@ -24,18 +24,19 @@
 
 <script>
 
+
 export default {
     name: 'Card',
     data(){
         return{
             imgBaseUrl: 'https://image.tmdb.org/t/p/w342',
+            flagBaseUrl: 'https://flagcdn.com/w80/',
         }
     },
     props:{
         sendResult: Object,
         type: String,
     },
-
     computed:{
         title: function(){
             if(this.type === 'movie') return this.sendResult.title;
@@ -49,16 +50,27 @@ export default {
         },
         vote: function(){
             return Math.round(this.sendResult.vote_average /2);
-        }
+        },
+        
+    },
+    methods:{
+        getFlag(){
+            let language = this.sendResult.original_language;
+            if(language === 'en') language = 'gb';
+            if(language === 'ko') language = 'kr';
+            if(language === 'hi') language = 'in';
+            if(language === 'cs') language = 'cz';
+            if(language === 'zh') language = 'cn';
+            if(language === 'fa') language = 'ir';
+            if(language === 'da') language = 'dk';
+            if(language === 'el') language = 'gr';
+            if(language === 'ja') language = 'jp';
+            return this.flagBaseUrl + language + '.png';
+        },
+           
+          
     },
     
-    methods:{
-        
-    },
-    mounted(){
-        
-        console.log('card mounted');
-    },
 }    
 </script>
 

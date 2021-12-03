@@ -1,10 +1,13 @@
 <template>
   <header class="container-fluid d-flex justify-content-between ">
     <img src="../assets/img/images.png" alt="logo">
-    <div >
+    <div class=" my-form d-flex " >
       <input v-model="search" type="text"
-              @keyup.enter="sendSearch()" >
-      <button @click="sendSearch()" >Search</button>
+              @keyup.enter="sendSearch()" 
+              class="form-control  h-50">
+      <button @click="sendSearch()" class="btn btn-light h-50">
+        Search
+      </button>
     </div>
   </header>
 </template>
@@ -44,12 +47,12 @@ header{
     height: 100%;
     margin-left: 20px;
   }
-  input,button{
-    margin-top: 30px;
-    margin-right: 20px;
-  }
-  button{
-    padding: 10px 20px;
+  .my-form{
+    width: 40%;
+    height: 100%;
+    input,button{
+      margin: 25px 20px 0 0;
+    }
   }
 }
 </style>
