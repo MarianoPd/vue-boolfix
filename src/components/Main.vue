@@ -18,7 +18,7 @@
               :key="index"
               :sendResult="result"
               :genresList="sendGenres(genreTvList, result)"
-              :type="'serie'"/>
+              :type="'tv'"/>
         </div>        
       </div>
       <h1 v-else>No sesults</h1>
@@ -53,6 +53,7 @@ export default {
       this.getGenresApi(this.genreListUrl);
     },
     methods:{
+      
       getGenresApi(url){
       axios.all([this.requestMovieGenres(url),this.requestTvGenres(url)])
         .then(axios.spread((moviesGen, seriesGen) =>{
@@ -77,7 +78,7 @@ export default {
             genres.push(element.name);
           }
         }
-        console.log(genres);
+        
         return genres;
       }
     }

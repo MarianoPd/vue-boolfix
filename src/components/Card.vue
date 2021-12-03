@@ -7,18 +7,25 @@
         <div class="flip-card-back d-flex flex-column">
             <div class="info ">
                 <p><strong>Titolo: </strong>{{title}}</p>
-                <p v-if="title !== originalTitle"><strong>Titolo originale: </strong>{{originalTitle}}</p>
                 <img  :src="getFlag()" :alt="sendResult.original_language">
                 <br>
                 <i v-for="(item, index) in 5" :key="index"  :class="index < vote ? 'fas' : 'far'"  class="fa-star gold"></i>
-            </div>
-            <div v-if="sendResult.overview !== ''" class="overview ">
+                <p v-if="title !== originalTitle"><strong>Titolo originale: </strong>{{originalTitle}}</p>
                 <p>
                     <strong>Genres</strong>
                     <span v-for="(genre,index) in genresList" :key="index">
                         {{genre + ', '}}
                     </span>
                 </p>
+                <p>
+                    <strong>Cast</strong>
+                    <span v-for="(member,index) in cast" :key="index">
+                        {{member.name + ', '}}
+                    </span>
+                </p>
+                
+            </div>
+            <div v-if="sendResult.overview !== ''" class="overview ">
                 {{sendResult.overview}}
             </div>
         </div>
@@ -29,7 +36,7 @@
 </template>
 
 <script>
-
+import axios from 'axios';
 
 export default {
     name: 'Card',
@@ -37,6 +44,11 @@ export default {
         return{
             imgBaseUrl: 'https://image.tmdb.org/t/p/w342',
             flagBaseUrl: 'https://flagcdn.com/w80/',
+            castBaseUrl: 'https://api.themoviedb.org/3/',
+            apiParams:{
+                api_key: 'b9d6f32d855fdb9b296cc4a18dc951e7', 
+            },
+            castArray: [],
         }
     },
     props:{
@@ -47,20 +59,35 @@ export default {
     computed:{
         title: function(){
             if(this.type === 'movie') return this.sendResult.title;
-            if(this.type === 'serie') return this.sendResult.name;
+            if(this.type === 'tv') return this.sendResult.name;
             return 0;
         },
         originalTitle: function(){
             if(this.type === 'movie') return this.sendResult.original_title;
-            if(this.type === 'serie') return this.sendResult.original_name;
+            if(this.type === 'tv') return this.sendResult.original_name;
             return 0;
         },
         vote: function(){
             return Math.round(this.sendResult.vote_average /2);
         },
+        cast: function(){
+            this.getCastApi();
+            return this.castArray;
+        }
         
     },
     methods:{
+        getCastApi(){
+            axios.get(this.castBaseUrl + this.type + '/' + 
+                        this.sendResult.id + '/credits',
+                        {params: this.apiParams} )
+            .then( r => {
+                this.castArray = r.data.cast.splice(0,5);
+            })
+            .catch( e => {
+                console.log('errore axios card',e);
+            })
+        },
         getFlag(){
             let language = this.sendResult.original_language;
             if(language === 'en') language = 'gb';
@@ -134,7 +161,7 @@ export default {
                     font-size: 25px;
                 }
                 
-                .overview{
+                .overview, .info{
                     
                     overflow-y: auto;
                 }
