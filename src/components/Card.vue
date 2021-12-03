@@ -13,6 +13,12 @@
                 <i v-for="(item, index) in 5" :key="index"  :class="index < vote ? 'fas' : 'far'"  class="fa-star gold"></i>
             </div>
             <div v-if="sendResult.overview !== ''" class="overview ">
+                <p>
+                    <strong>Genres</strong>
+                    <span v-for="(genre,index) in genresList" :key="index">
+                        {{genre + ', '}}
+                    </span>
+                </p>
                 {{sendResult.overview}}
             </div>
         </div>
@@ -36,6 +42,7 @@ export default {
     props:{
         sendResult: Object,
         type: String,
+        genresList: Array,
     },
     computed:{
         title: function(){
@@ -67,10 +74,8 @@ export default {
             if(language === 'ja') language = 'jp';
             return this.flagBaseUrl + language + '.png';
         },
-           
-          
-    },
     
+    },    
 }    
 </script>
 

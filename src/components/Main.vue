@@ -8,6 +8,7 @@
           <Card  v-for="(result, index) in showMovieResult"
               :key="index"
               :sendResult="result"
+              :genresList="sendGenres(genreMovieList, result)"
               :type="'movie'"/>
         </div>
         <h1><strong>Series</strong></h1>
@@ -16,6 +17,7 @@
           <Card  v-for="(result, index) in showSerieResult"
               :key="index"
               :sendResult="result"
+              :genresList="sendGenres(genreTvList, result)"
               :type="'serie'"/>
         </div>        
       </div>
@@ -25,7 +27,7 @@
 </template>
 
 <script>
-
+import axios from 'axios';
 import Card from './Card.vue';
 export default {
     name: 'Main',
@@ -35,17 +37,49 @@ export default {
     props:{
       showMovieResult: Array,
       showSerieResult: Array,
+      
     },
     data(){
       return{
-        
+        genreMovieList: [],
+        genreTvList: [],
+        genreListUrl: 'https://api.themoviedb.org/3/genre',
+        apiParams:{
+          api_key: 'b9d6f32d855fdb9b296cc4a18dc951e7', 
+        },
       }
     },
-    computed:{
-      
+    mounted(){
+      this.getGenresApi(this.genreListUrl);
     },
     methods:{
-      
+      getGenresApi(url){
+      axios.all([this.requestMovieGenres(url),this.requestTvGenres(url)])
+        .then(axios.spread((moviesGen, seriesGen) =>{
+          this.genreMovieList = moviesGen.data.genres;
+          this.genreTvList = seriesGen.data.genres;
+          console.log('list genre',this.genreMovieList,this.genreTvList);
+        }))
+        .catch( e => {
+            console.log('axios error list',e);
+        })
+      },
+      requestMovieGenres(url){
+        return axios.get(url + '/movie/list',{params: this.apiParams});
+      },
+      requestTvGenres(url){
+        return axios.get(url + '/tv/list',{params: this.apiParams});
+      },
+      sendGenres(list, object){
+        let genres = [];
+        for(const element of list){
+          if(object.genre_ids.includes(element.id)){
+            genres.push(element.name);
+          }
+        }
+        console.log(genres);
+        return genres;
+      }
     }
     
 }
@@ -54,7 +88,6 @@ export default {
 <style scoped lang="scss">
 @import '../assets/style/vars.scss';
 @import '../assets/style/generals.scss';
-
 
 main{
     min-height: calc(100vh - 100px);

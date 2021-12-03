@@ -20,11 +20,8 @@ export default {
     return{
       movieResults: [],
       serieResults: [],
-      genreMovieList: [],
-      genreTvList: [],
       apiUrl: 'https://api.themoviedb.org/3/search',
       popularApiUrl: 'https://api.themoviedb.org/3/discover',
-      genreListUrl: 'https://api.themoviedb.org/3/genre',
       apiParams:{
         api_key: 'b9d6f32d855fdb9b296cc4a18dc951e7',
         language: 'it-IT',
@@ -63,28 +60,9 @@ export default {
       return axios.get(url + '/tv',{params: this.apiParams});
     },
 
-    getGenresApi(url){
-      axios.all([this.requestMovieGenres(url),this.requestTvGenres(url)])
-        .then(axios.spread((moviesGen, seriesGen) =>{
-          this.genreMovieList = moviesGen.data.genres;
-          this.genreTvList = seriesGen.data.genres;
-          console.log('list genre',this.genreMovieList,this.genreTvList);
-        }))
-        .catch( e => {
-            console.log('axios error list',e);
-        })
-    },
-    requestMovieGenres(url){
-      return axios.get(url + '/movie/list',{params: this.apiParams});
-    },
-    requestTvGenres(url){
-      return axios.get(url + '/tv/list',{params: this.apiParams});
-    },
-
   },
   mounted(){
     this.getApi(this.popularApiUrl);
-    this.getGenresApi(this.genreListUrl);
   }
 
 }
