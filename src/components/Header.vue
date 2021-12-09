@@ -17,13 +17,9 @@
 export default {
   
   name: 'Header',
-  props: {
-    
-  },
   data(){
     return{
-      search: '',
-      
+      search: '',  
     }
   },
   methods:{

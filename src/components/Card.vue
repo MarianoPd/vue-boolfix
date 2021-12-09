@@ -60,16 +60,13 @@ export default {
         title: function(){
             if(this.type === 'movie') return this.sendResult.title;
             if(this.type === 'tv') return this.sendResult.name;
-            
-            return 0;
+            return '';
             
         },
         originalTitle: function(){
             if(this.type === 'movie') return this.sendResult.original_title;
             if(this.type === 'tv') return this.sendResult.original_name;
-            
-            return 0;
-            
+            return '';
         },
         vote: function(){
             return Math.round(this.sendResult.vote_average /2);

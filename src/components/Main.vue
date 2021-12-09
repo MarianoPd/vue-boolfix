@@ -2,19 +2,31 @@
   <main >
     <div class="container">
       <div v-if="(showMovieResult.length !== 0) || (showSerieResult.length !== 0)">
-        <h1><strong>Movies</strong></h1>
+        <div class="d-flex justify-content-between sub-header">
+          <h1><strong>Movies</strong></h1>
+          <select v-model="selectedMovieGenre">
+            <option value="">genre</option>
+            <option v-for="(genre, index) in genreMovieList" :key="index" :value="genre">{{genre.name}}</option>
+          </select>
+        </div>
         <h1 v-if="showMovieResult.length === 0">There are no movies with this name</h1>
         <div v-else class="row flex-wrap no-gutters mb-1">
-          <Card  v-for="(result, index) in showMovieResult"
+          <Card  v-for="(result, index) in getFilteredList(showMovieResult, selectedMovieGenre)"
               :key="index"
               :sendResult="result"
               :genresList="sendGenres(genreMovieList, result)"
               :type="'movie'"/>
         </div>
-        <h1><strong>Series</strong></h1>
+        <div class="d-flex justify-content-between sub-header">
+          <h1><strong>Tv Shows</strong></h1>
+          <select v-model="selectedTvGenre">
+            <option value="">genre</option>
+            <option v-for="(genre, index) in genreTvList" :key="index" :value="genre">{{genre.name}}</option>
+          </select>
+        </div>
         <h1 v-if="showSerieResult.length === 0">There are no series with this name</h1>
         <div v-else class="row flex-wrap no-gutters mb-1">    
-          <Card  v-for="(result, index) in showSerieResult"
+          <Card  v-for="(result, index) in getFilteredList(showSerieResult,selectedTvGenre)"
               :key="index"
               :sendResult="result"
               :genresList="sendGenres(genreTvList, result)"
@@ -43,6 +55,8 @@ export default {
       return{
         genreMovieList: [],
         genreTvList: [],
+        selectedMovieGenre: '',
+        selectedTvGenre: '',
         genreListUrl: 'https://api.themoviedb.org/3/genre',
         apiParams:{
           api_key: 'b9d6f32d855fdb9b296cc4a18dc951e7', 
@@ -51,8 +65,22 @@ export default {
     },
     mounted(){
       this.getGenresApi(this.genreListUrl);
+      this.$emit
     },
     methods:{
+      getFilteredList(results, genre){
+        let newList = [];
+        console.log('genre',genre);
+        
+        if(genre === '') return results;
+        for(let i = 0; i< results.length; i++){
+          if(results[i].genre_ids.includes(genre.id)){
+            newList.push(results[i]);
+          }
+        }
+        console.log('new list' , newList);
+        return newList;
+      },
       
       getGenresApi(url){
       axios.all([this.requestMovieGenres(url),this.requestTvGenres(url)])
@@ -78,7 +106,6 @@ export default {
             genres.push(element.name);
           }
         }
-        
         return genres;
       }
     }
@@ -93,9 +120,14 @@ export default {
 main{
     min-height: calc(100vh - 100px);
     background-image: linear-gradient($primary-color, darken($primary-color,10%));
-    h1{
+    .sub-header{
       color: white;
       padding-top: 100px;
+      select{
+        height: 30px;
+        width: 200px;
+      }
     }
+    
 }
 </style>
